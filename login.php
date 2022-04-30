@@ -18,6 +18,12 @@
             <h1>Welcome Back</h1>
             <?php
                 if(!security_loggedIn()){
+
+                    // while user is trying to log in, if they press the submit button, this happens
+                    if (security_submit()){
+                        // echo("logged in");
+                        security_login();
+                    }
             ?>
                 <form action="login.php" method="POST">
                     <input type="text" name="username" placeholder="Username">
@@ -31,16 +37,13 @@
 
             <?php
                 echo("<p>Need an account? <a style='text-decoration: none' href='signup.php'>Sign Up Now</a></p>");
-                // while user is trying to log in, if they press the submit button, this happens
-                if (security_submit()){
-                    echo("logged in");
-                    security_login();
                 }
-            }
-                // else if user is not logged in
+                // else if user is logged in
                 else {
                     // display index page
-                    echo("<a style='text-decoration: none' href='index.php'>Home</a>");
+                    echo("You are already logged into an account! You need to log out before logging in as a different user.");
+                    echo("<br>");
+                    echo("<a style='text-decoration: none' href='logout.php'>Log Out</a>");
                 }
                 
             ?>

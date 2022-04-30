@@ -16,7 +16,7 @@
                     security_logout();
                     echo("You have successfully logged out.");
                     echo("<br>");
-                    echo("<p>Need to log back in? <a style='text-decoration: none' href='login.php'>Log In Again</a></p>");
+                    echo("<p>Need to sign back in? <a style='text-decoration: none' href='index.php'>Sign In Again</a></p>");
                 }
                 // else if the user is not logged in
                 else {

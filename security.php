@@ -13,6 +13,19 @@
         return $status;
     }
 
+    // this function is strictly to validate the new password 
+    function security_validateNewPassword(){
+        // Set a default value
+        $status = false;
+        
+        // Validate
+        if(isset($_POST["newpassword"])) {
+            $status = true;
+        }
+
+        return $status;
+    }
+
     // this function is strictly to validate the other user info 
     function security_validateOtherInfo(){
         // Set a default value
@@ -52,6 +65,9 @@
             // Set a cookie
             setcookie("login", "yes");
         }
+        else {
+            echo("<p style='color:red;'><b>Error:</b> The username or password you have enetered is incorrect.</p>");
+        }
     }
 
     function security_addNewUser() {
@@ -73,40 +89,55 @@
         database_close();
     }
 
-    // function security_deleteUser(){
-    //     // Validate and sanitize.
-    //     $result = security_sanitize();
+    function security_deleteUser(){
+        // Validate and sanitize.
+        $result = security_sanitize();
 
-    //     // Open connection.
-    //     database_connect();
+        // Open connection.
+        database_connect();
 
-    //     // Use connection.
-    //     // 
-    //     // The database_deleteUser() function already verifies that the username and password we are trying to delete exists in the database
-    //     database_deleteUser($result["username"], $result["password"]);
+        // Use connection.
+        // 
+        // The database_deleteUser() function already verifies that the username and password we are trying to delete exists in the database
+        database_deleteUser($result["username"], $result["password"]);
 
-    //     // Close connection
-    //     database_close();
-    // }
+        // Close connection
+        database_close();
+    }
 
-    // function security_updatePassword(){
-    //     // Validate and sanitize username and password
-    //     $result = security_sanitize();
+    function security_updatePassword(){
+        // Validate and sanitize username and password
+        $result = security_sanitize();
 
-    //     // Validate and sanitize new password
-    //     $result2 = security_sanitizeNewPassword();
+        // Validate and sanitize new password
+        $result2 = security_sanitizeNewPassword();
 
-    //     // Open connection.
-    //     database_connect();
+        // Open connection.
+        database_connect();
 
-    //     // Use connection
-    //     // 
-    //     // The database_updateUser() function already verifies that the username and password we are trying to delete exists in the database
-    //     database_updatePassword($result["username"], $result["password"], $result2["newpassword"]);
+        // Use connection
+        // 
+        // The database_updateUser() function already verifies that the username and password we are trying to delete exists in the database
+        database_updatePassword($result["username"], $result["password"], $result2["newpassword"]);
 
-    //     // Close connection
-    //     database_connection();
-    // }
+        // Close connection
+        database_connection();
+    }
+
+     // function used to determine whether or not the logged in user who is navigating to the rent a textbook page has already rented a textbook previously
+     function security_secondRent($user){
+        // Open connection.
+        database_connect();
+
+        // echo(" security func ");
+        // echo($user);
+
+        // calls function to add it to database
+        database_secondRent($user);
+
+        // Close connection
+        database_connection();
+    }
     
     function security_rentBook($user){
 
@@ -167,6 +198,22 @@
             $result["password"] = htmlspecialchars($_POST["password"]);
         }
 
+        // Return array
+        return $result;
+    }
+
+    // this function is strictly to sanitize the new password
+    function security_sanitizeNewPassword(){
+        // Create an array of keys newpassword
+        $result = [
+            "newpassword" => null
+        ];
+
+        if(security_validateNewPassword()) {
+            // After validation, sanitize text input.
+            $result["newpassword"] = htmlspecialchars($_POST["newpassword"]);
+        }
+        
         // Return array
         return $result;
     }

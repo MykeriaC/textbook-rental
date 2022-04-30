@@ -20,6 +20,12 @@
 
         <?php
             if(security_loggedIn()){
+                if (security_submit()){
+
+                    $user = $_SESSION["username"];
+                    
+                    security_rentBook($user);
+                }   
         ?>  
                 <form action="rent.php" method="POST" >      
                     <input type="radio" name="books" value="toKillAMockingbird"/>
@@ -38,21 +44,6 @@
                 </form>
 
         <?php
-                if (security_submit()){
-                    // $rent = $_POST['books'];
-                    // echo($rent);
-                    // echo("no");
-
-                    $user = $_SESSION["username"];
-
-                    // echo($user);
-
-                    security_rentBook($user);
-
-                    // echo("hello");
-
-                
-                }    
             }
             // else if user is not logged in, it should say the user needs to log in to rent a book
             else {

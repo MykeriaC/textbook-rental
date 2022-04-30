@@ -36,26 +36,43 @@
         }
     }
 
+    function database_deleteUser($username, $password){
+        // Use the global connection
+        global $connection;
+
+        if($connection != null){
+            // verifies that the user that we are trying to delete exists in the database first
+            if (database_verifyUser($username, $password)){
+                // if the username and password passed in do exist, we are going to delete it from the table 'users'
+                mysqli_query($connection, "DELETE FROM renters WHERE username='{$username}';");
+
+                // logs the user out after their account is deleted
+                setcookie("login", "yes", time() - 10);
+            }
+        }
+
+    }
+
     // // Accepts username, password, and new password
-    // function database_updatePassword($username, $password, $newpassword){
-    //     // Use the global connection
-    //     global $connection;
+    function database_updatePassword($username, $password, $newpassword){
+        // Use the global connection
+        global $connection;
 
-    //     if($connection != null){
-    //         // verifies that the username and password passed in exists in the database
-    //         if (database_verifyUser($username, $password)){
+        if($connection != null){
+            // verifies that the username and password passed in exists in the database
+            if (database_verifyUser($username, $password)){
 
-    //             // updates password with new password
-    //             // MAKE SURE THE PASSWORD IS A HASH BEFORE PASSING IT IN
-    //             // Overwrite the existing new password value as a hash
-    //             // $newpasswordHash = $_POST['newpassword'];
-    //             $newpassword = password_hash($newpassword, PASSWORD_DEFAULT);
-    //             mysqli_query($connection, "UPDATE renters 
-    //             SET password='{$newpassword}' 
-    //             WHERE username='{$username}';");
-    //         }
-    //     }
-    // }
+                // updates password with new password
+                // MAKE SURE THE PASSWORD IS A HASH BEFORE PASSING IT IN
+                // Overwrite the existing new password value as a hash
+                // $newpasswordHash = $_POST['newpassword'];
+                $newpassword = password_hash($newpassword, PASSWORD_DEFAULT);
+                mysqli_query($connection, "UPDATE renters 
+                SET password='{$newpassword}' 
+                WHERE username='{$username}';");
+            }
+        }
+    }
 
     // function to specifically check if the book is already checked out
     function database_alreadyRented($rent){
@@ -77,13 +94,48 @@
 
             // If $row is not null, it found row data where that book is already checked out so we want status to be true
             if($row != null) {
-                // echo("row not null so it found data in the table where the book is already checked out");
                 $status = true;
             }
         }
 
         // if status stays false when status returns, that means the book was not rented; if status true the book was rented
         return $status;
+    }
+
+    // this function takes in the rented value of the name of the book (e.g.: theGreatGatsby) and returns the string version of it (The Great Gatsby)
+    function database_returnTitle($rent){
+        if ($rent == "toKillAMockingbird"){
+            return $title = "To Kill A Mockingbird";
+        }
+        else if ($rent == "theGreatGatsby"){
+            return $title = "The Great Gatsby";
+        }
+        else if ($rent == "mobyDick"){
+            return $title = "Moby Dick";
+        }
+    }
+
+    // checks whether or not the user attempting to rent a book already has one checked out
+    function database_secondRent($user){
+        // Use the global connection
+        global $connection;
+
+        $secondOne = false;
+
+        if($connection != null){
+            // finds the row in the table that matches $user and sees if that user has checked out a book already (aka if checked_out is yes or no)
+            $results = mysqli_query($connection, "SELECT checked_out FROM renters WHERE username='{$user}';");
+
+            // mysqli_fetch_assoc() returns either null or row data
+            $row = mysqli_fetch_assoc($results);
+
+            // if the current user has checked out a book already, 
+            if($row["checked_out"] == "yes"){
+                return $secondOne = true;
+            }
+        }
+
+        return $secondOne;
     }
 
     function database_rentBook($user){
@@ -93,29 +145,34 @@
         // whatever book the user selected to rent, the "value" from the form is passed into $rent (aka if To Kill A MB is selected, $rent would store "toKillAMockingbird")
         $rent = $_POST["books"];
 
-        // echo(" database_rentBook username value:  ");
-        // echo($user);
-
-
         // passes the value of rent into the database
         if($connection != null){
 
-            // if the book this user is checking out isnt already checked out by someone else, you may procceed with the two mysqli queries and set $unrented to true to signify that the book is unrented
-            // more: if database_alreadyRented() returns false, then we want to proceed with the two mysqli queries because we know the book wasnt already checked out
-            if (!database_alreadyRented($rent)) {
+            // if the user doesnt have a an unreturned book rented
+            if(!database_secondRent($user)){
+                // if the book this user is checking out isnt already checked out by someone else, you may procceed with the two mysqli queries and set $unrented to true to signify that the book is unrented
+                // more: if database_alreadyRented() returns false, then we want to proceed with the two mysqli queries because we know the book wasnt already checked out
+                if (!database_alreadyRented($rent)) {
 
-            // adds the book that the user is checking out to rented colum of the table
-            mysqli_query($connection, "UPDATE renters SET rented='{$rent}' WHERE username='{$user}';");
+                // adds the book that the user is checking out to rented colum of the table
+                mysqli_query($connection, "UPDATE renters SET rented='{$rent}' WHERE username='{$user}';");
 
-            // since the user has checked out a book at this point, the value of checked for the logged in user should change from no to yes
-            mysqli_query($connection, "UPDATE renters SET checked_out='yes' WHERE username='{$user}';");
-
-            echo("book was never checked out so this user has officially checked out that book");
-            echo(" you have officially checked out " . $rent);
-            
+                // since the user has checked out a book at this point, the value of checked for the logged in user should change from no to yes
+                mysqli_query($connection, "UPDATE renters SET checked_out='yes' WHERE username='{$user}';");
+                
+                // we want to call another function that would pass in $rent and return the actual string name of the book
+                $title = database_returnTitle($rent);
+                echo("You have officially checked out " . $title. "!");
+                
+                }
+                else {
+                    echo("This book was already checked out by another user! Choose another book.");
+                }
             }
+            // else if the user has a book rented out that they did not return
             else {
-                echo("book was already checked out by another user! so user cannot check this out! choose another book");
+                echo("<p style='color:red;'><b>Error:</b> You have already rented out a book! Return that one before attempting to rent a new one.</p>");
+                echo("<a style='text-decoration: none' href='checkin.php'>Return A Book</a>");
             }
         }
     }
@@ -127,7 +184,6 @@
 
         // makes sure connection is there
         if($connection != null){
-
             // locates checked out from the rown that has the name of the passed in user
             $results = mysqli_query($connection, "SELECT checked_out, rented FROM renters WHERE username = '{$user}';");
 
@@ -143,12 +199,11 @@
             else {
                 echo("You have a book checked out!");
                 echo("<br>");
-                echo("Information on book: ");
-                echo("<br>");
                 // name of rented book that the user has chosen (the one that needs to be returned )
-                echo($row["rented"]);
+                $title = database_returnTitle($row["rented"]);
+                echo($title);
                 echo("<br>");
-                echo("<a style='text-decoration: none' href='checkin.php'>Return A Book</a>");
+                echo("<a style='text-decoration: none' href='checkin.php'>Return Book</a>");
             }
         }
     }
@@ -164,9 +219,12 @@
 
             $row = mysqli_fetch_assoc($results);
 
-            echo("You have returned ". $row["rented"] ."!");
+            $title = database_returnTitle($row["rented"]);
+
+            echo("You have returned ". $title ."!");
             echo("<br>");
-            
+            echo("<a style='text-decoration: none' href='rent.php'>Rent Another Book</a>");
+
             // uses the value of $user passed into the parameter to locate the row that needs to have its rented and checked_out values changed
             mysqli_query($connection, "UPDATE renters SET rented = NULL, checked_out = 'no' WHERE username='{$user}';");
 

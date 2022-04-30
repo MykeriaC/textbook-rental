@@ -28,6 +28,9 @@
             else {
                 $user = $_SESSION["username"];
 
+                echo($user);
+                echo("<br>");
+
                 security_returnNeeded($user);
             }
         ?>
