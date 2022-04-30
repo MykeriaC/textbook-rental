@@ -83,7 +83,6 @@
         }
 
         // if status stays false when status returns, that means the book was not rented; if status true the book was rented
-
         return $status;
     }
 
@@ -118,6 +117,64 @@
             else {
                 echo("book was already checked out by another user! so user cannot check this out! choose another book");
             }
+        }
+    }
+
+    // used in return.php to see if user has a book they need to return 
+    function database_returnNeeded($user){
+        // Use the global connection
+        global $connection;
+
+        // makes sure connection is there
+        if($connection != null){
+
+            // locates checked out from the rown that has the name of the passed in user
+            $results = mysqli_query($connection, "SELECT checked_out, rented FROM renters WHERE username = '{$user}';");
+
+            $row = mysqli_fetch_assoc($results);
+
+            // if the row that was selected has no for checked_out, that means the user has not checked out any books and has no need to return anything
+            if ($row["checked_out"] == "no"){
+               echo("You have not checked out any books!");
+               echo("<br>");
+               echo("<a style='text-decoration: none' href='rent.php'>Rent A Book</a>");
+            }
+            // else if the row that was selected has yes for checked_out, that means the user has checked out books and will need to make a return (when they click on return, it should change the value of checked out from yes to no and the value of rented from the name of the book to NULL)
+            else {
+                echo("You have a book checked out!");
+                echo("<br>");
+                echo("Information on book: ");
+                echo("<br>");
+                // name of rented book that the user has chosen (the one that needs to be returned )
+                echo($row["rented"]);
+                echo("<br>");
+                echo("<a style='text-decoration: none' href='checkin.php'>Return A Book</a>");
+            }
+        }
+    }
+
+    // used in checkin.php to "return" a book which essentially sets rented back to NULL and checked_out to "no"
+    function database_checkBookIn($user){
+        // Use the global connection
+        global $connection;
+
+        if($connection != null){
+
+            $results = mysqli_query($connection, "SELECT rented FROM renters WHERE username='{$user}';");
+
+            $row = mysqli_fetch_assoc($results);
+
+            echo("You have returned ". $row["rented"] ."!");
+            echo("<br>");
+            
+            // uses the value of $user passed into the parameter to locate the row that needs to have its rented and checked_out values changed
+            mysqli_query($connection, "UPDATE renters SET rented = NULL, checked_out = 'no' WHERE username='{$user}';");
+
+            // echo("values from checkBookIn function ");
+            // if($row["rented"] == NULL){
+            //     echo(" rented is NULL ");
+            // }
+            // echo($row["checked_out"]);
         }
     }
 

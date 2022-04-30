@@ -38,27 +38,27 @@
                 </form>
 
         <?php
-             if (security_submit()){
-                // $rent = $_POST['books'];
-                // echo($rent);
-                // echo("no");
+                if (security_submit()){
+                    // $rent = $_POST['books'];
+                    // echo($rent);
+                    // echo("no");
 
-                $user = $_SESSION["username"];
+                    $user = $_SESSION["username"];
 
-                // echo($user);
+                    // echo($user);
 
-                security_rentBook($user);
+                    security_rentBook($user);
 
-                // echo("hello");
+                    // echo("hello");
 
-               
-             }    
+                
+                }    
             }
             // else if user is not logged in, it should say the user needs to log in to rent a book
             else {
-                echo("Seems you have not logged in yet!");
+                echo("Seems you have not logged in yet! Please log in to rent a book");
                 echo("<br>");
-                echo("<a style='text-decoration: none' href='login.php'>Return to Log In</a>");
+                echo("<a style='text-decoration: none' href='login.php'>Go to Log In Page</a>");
             }
         ?>    
     </body>

@@ -123,6 +123,26 @@
         database_connection();
     }
 
+    function security_returnNeeded($user){
+        // Open connection.
+        database_connect();
+
+        database_returnNeeded($user);
+
+        // Close connection
+        database_connection();
+    }
+
+    function security_checkBookIn($user){
+        // Open connection.
+        database_connect();
+
+        database_checkBookIn($user);
+
+        // Close connection
+        database_connection();
+    }
+
     function security_loggedIn() {
         // Does a cookie exist?
         return isset($_COOKIE["login"]);
