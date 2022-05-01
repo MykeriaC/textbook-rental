@@ -70,6 +70,34 @@
         }
     }
 
+    function security_regCheck($fName, $lName, $id, $email){
+        $notDone = true;
+
+        // reg expressions
+        $nameReg = "/^([a-zA-Z]+|N\/A)$/";
+        $idReg = "/^[0-9]{7}$/";
+        $emailReg = "/^[a-zA-Z]{1,100}[0-9]?@knights.ucf.edu$/";
+        
+        
+        if(!preg_match($nameReg, $fName)){
+            echo("<p style='color:red;'>*Must enter valid First Name<br></p>");
+            $notDone = false;
+        }
+        if(!preg_match($nameReg, $lName)){
+            echo("<p style='color:red;'>*Must enter valid First Name<br></p>");
+            $notDone = false;
+        }
+        if(!preg_match($idReg, $id)){
+            echo("<p style='color:red;'>*Must enter valid UCF ID number (7-digit number)<br></p>");
+            $notDone = false;
+        }
+        if(!preg_match($emailReg, $email)){
+            echo("<p style='color:red;'>*Must enter valid UCF Knights Email (ending in @knights.ucf.edu)<br></p>");
+            $notDone = false;
+        }
+        return $notDone;
+    }
+
     function security_addNewUser() {
         // Validate and sanitize.
         $result = security_sanitize();

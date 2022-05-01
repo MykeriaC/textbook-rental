@@ -74,37 +74,44 @@
             if(!security_loggedIn()){
 
                 if (security_submit()){
-                    // echo("You're signed up! Please log in.");
-                    // echo("<br>");
-                    // echo("<a style='text-decoration: none' href='login.php'>Log In</a>");
-
-                    // adds the user to the database
-                    security_addNewUser();
-
                     // put this in a security function so that you're not calling post right here etc: function security_userPass(){ $user = $_POST["username"]; return $user; } then in here do $user = security_userPass() to pass the value to a variable and do an acho to confirm the value has been passed like echo($user)
                     $user = $_POST["username"];
 
                     // once the user submits their info, this will pass the value of their username to to session
                     $_SESSION["username"] = $user;
+
+                    // list of posts from form
+
+                    $firstName = $_POST["firstName"];
+                    $lastName = $_POST["lastName"];
+                    $id = $_POST["ucfID"];
+                    $email = $_POST["email"];
+
+                    
+                    if(security_regCheck($firstName, $lastName, $id, $email)){
+                        // adds the user to the database
+                        security_addNewUser();
+                    }
+                    
                 }
         ?>
                 <form action="signup.php" method="POST">
-                    <input type="text" name="firstName" placeholder="First Name">
+                    <input type="text" name="firstName" placeholder="First Name" required>
                     <br>
                     <br>
-                    <input type="text" name="lastName" placeholder="Last Name">
+                    <input type="text" name="lastName" placeholder="Last Name" required>
                     <br>
                     <br>
-                    <input type="text" name="email" placeholder="Email">
+                    <input type="text" name="email" placeholder="UCF Knights Email" required>
                     <br>
                     <br>
-                    <input type="text" name="ucfID" placeholder="UCF ID">
+                    <input type="text" name="ucfID" placeholder="UCF ID (7-digit number)" required>
                     <br>
                     <br>
-                    <input type="text" name="username" placeholder="Username">
+                    <input type="text" name="username" placeholder="Username" required>
                     <br>
                     <br>
-                    <input type="password" name="password" placeholder="Password">
+                    <input type="password" name="password" placeholder="Password" required>
                     <br>
                     <br>
                     <input class="send" type="submit" value="submit" name="submit"/>
