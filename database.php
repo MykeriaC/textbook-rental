@@ -43,14 +43,26 @@
         if($connection != null){
             // verifies that the user that we are trying to delete exists in the database first
             if (database_verifyUser($username, $password)){
-                // if the username and password passed in do exist, we are going to delete it from the table 'users'
-                mysqli_query($connection, "DELETE FROM renters WHERE username='{$username}';");
+                $results = mysqli_query($connection, "SELECT checked_out FROM renters WHERE username='{$username}';");
 
-                // logs the user out after their account is deleted
-                setcookie("login", "yes", time() - 10);
+                $row = mysqli_fetch_assoc($results);
+                // if a user has a checked out book, it shouldnt let you delete
+                if($row["checked_out"] == "yes"){
+                    echo("<p style='color:red;'><b>Error:</b> Unable to delete account. User still has a book checked out.");
+                }
+                // if the user doesnt have any checked out books, it should let you delete
+                else {
+                    // if the username and password passed in do exist, we are going to delete it from the table 'users'
+                    mysqli_query($connection, "DELETE FROM renters WHERE username='{$username}';");
+
+                    // logs the user out after their account is deleted
+                    setcookie("login", "yes", time() - 10);
+                }
+            }
+            else {
+                echo("<p style='color:red;'><b>Error:</b> Unable to delete account. The username or password you have enetered is incorrect.");
             }
         }
-
     }
 
     // // Accepts username, password, and new password
@@ -193,7 +205,7 @@
             if ($row["checked_out"] == "no"){
                echo("You have not checked out any books!");
                echo("<br>");
-               echo("<a style='text-decoration: none' href='rent.php'>Rent A Book</a>");
+               echo("<a style='text-decoration: none' href='rent.php'><button>Rent A Book</button></a>");
             }
             // else if the row that was selected has yes for checked_out, that means the user has checked out books and will need to make a return (when they click on return, it should change the value of checked out from yes to no and the value of rented from the name of the book to NULL)
             else {
@@ -203,7 +215,7 @@
                 $title = database_returnTitle($row["rented"]);
                 echo($title);
                 echo("<br>");
-                echo("<a style='text-decoration: none' href='checkin.php'>Return Book</a>");
+                echo("<a style='text-decoration: none' href='checkin.php'><button>Return Book</button></a>");
             }
         }
     }
@@ -223,7 +235,7 @@
 
             echo("You have returned ". $title ."!");
             echo("<br>");
-            echo("<a style='text-decoration: none' href='rent.php'>Rent Another Book</a>");
+            echo("<a style='text-decoration: none' href='rent.php'><button>Rent Another Book</button></a>");
 
             // uses the value of $user passed into the parameter to locate the row that needs to have its rented and checked_out values changed
             mysqli_query($connection, "UPDATE renters SET rented = NULL, checked_out = 'no' WHERE username='{$user}';");

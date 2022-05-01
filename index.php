@@ -4,8 +4,46 @@
 <html>
     <head>
         <title>Homepage</title>
+        <style>
+            ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            }
+
+            li {
+            float: left;
+            }
+
+            li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            }
+
+            li a:hover:not(.active) {
+            background-color: #27285c;
+            }
+
+            .active {
+            background-color: #ffaf42;
+            }
+            body {
+                text-align: center;
+                justify-content: center;
+            }
+        </style>  
     </head>
     <body>
+        <?php
+            echo("<ul>");
+            echo("<li style='float:right'><a class='active' style='text-decoration: none' href='index.php'>Home</a></li>");
+            echo("</ul>");
+        ?>
         <h1>Welcome To Rent To Read</h1>
         <?php
                 // if the user is logged in, 
@@ -26,9 +64,9 @@
                 // else if the user is NOT logged in
                 else {
                     echo('<br>');
-                    echo('<a style="text-decoration: none" href="signup.php">Sign Up</a>');
+                    echo('<a style="text-decoration: none" href="signup.php"><button>Sign Up</button></a>');
                     echo('<br>');
-                    echo('<a style="text-decoration: none" href="login.php">Login</a>');
+                    echo('<a style="text-decoration: none" href="login.php"><button>Login</button></a>');
                     echo('<br>');
                     
                 }
