@@ -43,6 +43,21 @@
                 text-align: left;
                 padding-left: 38%;
             }
+            body {
+                text-align: center;
+                justify-content: center;
+            }
+            button, .send {
+                background-color: #ffaf42; /* Green */
+                border: none;
+                border-radius: 30px;
+                color: white;
+                padding: 8px 14px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 12px;
+            }
         </style>  
     </head>
     <body>
@@ -81,7 +96,7 @@
                         <br>
                         <br>
                     </div>
-                    <input type="submit" value="submit" name="submit"/>
+                    <input class="send" type="submit" value="submit" name="submit"/>
                 </form>
 
         <?php

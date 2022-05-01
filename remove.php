@@ -38,6 +38,21 @@
                 text-align: center;
                 justify-content: center;
             }
+            body {
+                text-align: center;
+                justify-content: center;
+            }
+            button, .send {
+                background-color: #ffaf42; /* Green */
+                border: none;
+                border-radius: 30px;
+                color: white;
+                padding: 8px 14px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 12px;
+            }
         </style>  
     </head>
     <body>
@@ -69,7 +84,7 @@
                     <input class="userPass" type="password" name="password" placeholder="Password">
                     <br>
                     <br>
-                    <input class="suButton" type="submit" value="submit" name="submit"/>
+                    <input class="send" type="submit" value="submit" name="submit"/>
                 </form>      
         <?php
             }
@@ -77,7 +92,7 @@
             else {
                 echo("Seems you have not logged in yet! Please log in to delete your account.");
                 echo("<br>");
-                echo("<a style='text-decoration: none;' href='signup.php'><button>Return Home</button></a>"); 
+                echo("<a style='text-decoration: none;' href='login.php'><button>Go to Log In Page</button></a>"); 
             } 
         ?>
     </body>

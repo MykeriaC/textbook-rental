@@ -39,7 +39,7 @@
                 justify-content: center;
             }
             button, .send {
-                background-color: #ffaf42; /* Green */
+                background-color: #ffaf42;
                 border: none;
                 border-radius: 30px;
                 color: white;

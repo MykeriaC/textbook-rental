@@ -38,6 +38,21 @@
                 text-align: center;
                 justify-content: center;
             }
+            body {
+                text-align: center;
+                justify-content: center;
+            }
+            button, .send {
+                background-color: #ffaf42; 
+                border: none;
+                border-radius: 30px;
+                color: white;
+                padding: 8px 14px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 12px;
+            }
         </style> 
     </head>
     <body>
@@ -71,7 +86,7 @@
                     <input class="userPass" type="password" name="newpassword" placeholder="New Password">
                     <br>
                     <br>
-                    <input type="submit" value="Apply Changes" name="submit"/>
+                    <input class="send" type="submit" value="Apply Changes" name="submit"/>
                 </form>
         <?php
                 // this should help with the issue I had with when I go back to the sign up sheet from the login sheet without logging in, the code thinks Ive logged in 

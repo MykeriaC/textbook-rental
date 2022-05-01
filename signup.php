@@ -41,6 +41,21 @@
                 text-align: center;
                 justify-content: center;
             }
+            body {
+                text-align: center;
+                justify-content: center;
+            }
+            button, .send {
+                background-color: #ffaf42; /* Green */
+                border: none;
+                border-radius: 30px;
+                color: white;
+                padding: 8px 14px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 12px;
+            }
         </style>  
     </head>
     <body>
@@ -92,7 +107,7 @@
                     <input type="password" name="password" placeholder="Password">
                     <br>
                     <br>
-                    <input type="submit" value="submit" name="submit"/>
+                    <input class="send" type="submit" value="submit" name="submit"/>
                 </form>
         <?php
                 echo("<p>Already a user? <a style='text-decoration: none' href='login.php'><button>Log In Now</button></a></p>");

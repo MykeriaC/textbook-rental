@@ -174,7 +174,7 @@
                 
                 // we want to call another function that would pass in $rent and return the actual string name of the book
                 $title = database_returnTitle($rent);
-                echo("You have officially checked out " . $title. "!");
+                echo("You have officially checked out <b>" . $title. "</b>!");
                 
                 }
                 else {
@@ -184,7 +184,7 @@
             // else if the user has a book rented out that they did not return
             else {
                 echo("<p style='color:red;'><b>Error:</b> You have already rented out a book! Return that one before attempting to rent a new one.</p>");
-                echo("<a style='text-decoration: none' href='checkin.php'>Return A Book</a>");
+                echo("<a style='text-decoration: none' href='checkin.php'><button>Return A Book</button></a>");
             }
         }
     }
@@ -213,7 +213,7 @@
                 echo("<br>");
                 // name of rented book that the user has chosen (the one that needs to be returned )
                 $title = database_returnTitle($row["rented"]);
-                echo($title);
+                echo("<b>". $title ."</b>");
                 echo("<br>");
                 echo("<a style='text-decoration: none' href='checkin.php'><button>Return Book</button></a>");
             }
@@ -233,7 +233,7 @@
 
             $title = database_returnTitle($row["rented"]);
 
-            echo("You have returned ". $title ."!");
+            echo("You have returned <b>". $title ."</b>!");
             echo("<br>");
             echo("<a style='text-decoration: none' href='rent.php'><button>Rent Another Book</button></a>");
 

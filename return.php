@@ -39,6 +39,21 @@
                 text-align: center;
                 justify-content: center;
             }
+            body {
+                text-align: center;
+                justify-content: center;
+            }
+            button, .send {
+                background-color: #ffaf42;
+                border: none;
+                border-radius: 30px;
+                color: white;
+                padding: 8px 14px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 12px;
+            }
         </style>
     </head>
     <body>
